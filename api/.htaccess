@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteRule ^login/?$ login.php [L]
+RewriteRule ^register/?$ register.php [L]
+RewriteRule ^users/?$ users.php [L]
+RewriteRule ^users/([0-9]+)/?$ users.php?number=$1 [L]
+RewriteRule ^topup/?$ topup.php [L]
+RewriteRule ^transfer/?$ transfer.php [L]
