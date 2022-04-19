@@ -45,13 +45,6 @@
                         $stmt->bind_param('si', $balance, $input['number']);
                         try {
                             $stmt->execute();
-                            http_response_code(200);
-                            $res = [
-                                "status" => 200,
-                                "msg" =>  "Topup berhasil dilakukan."
-                            ];
-                            echo json_encode($res);
-                            exit;
                         }
                         catch (Exception $e)
                         {
@@ -63,6 +56,31 @@
                             echo json_encode($res);
                             exit;
                         }
+                        
+                        $date = date("Y-m-d H:i:s");
+                        $stmt = $conn->prepare("INSERT INTO history_topup(history_topup_number, history_topup_amount, history_topup_date) VALUE (?, ?, ?)");
+                        $stmt->bind_param('sis', $input['number'], $input['amount'], $date);
+                        try {
+                            $stmt->execute();
+                        }
+                        catch (Exception $e)
+                        {
+                            http_response_code(500);
+                            $res = [
+                                "status" => 500,
+                                "msg" =>  "Internal Server Error: ". $e->getMessage() . "."
+                            ];
+                            echo json_encode($res);
+                            exit;
+                        }
+                        
+                        http_response_code(200);
+                            $res = [
+                                "status" => 200,
+                                "msg" =>  "Topup berhasil dilakukan."
+                            ];
+                        echo json_encode($res);
+                        exit;
                     }
                     else {
                         http_response_code(400);

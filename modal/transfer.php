@@ -70,9 +70,10 @@
                     else {
                         $balance_asal = $result_asal['users_balance'] - $input['amount']; 
                         $balance_tujuan = $result_tujuan['users_balance'] + $input['amount']; 
+                        $number = $token->data->number;
 
                         $stmt = $conn->prepare("UPDATE users SET users_balance = ? WHERE users_number = ?");
-                        $stmt->bind_param('si', $balance_asal, $token->data->number);
+                        $stmt->bind_param('ss', $balance_asal, $number);
                         try {
                             $stmt->execute();
                         }
@@ -89,6 +90,23 @@
 
                         $stmt = $conn->prepare("UPDATE users SET users_balance = ? WHERE users_number = ?");
                         $stmt->bind_param('si', $balance_tujuan, $input['tujuan']);
+                        try {
+                            $stmt->execute();
+                        }
+                        catch (Exception $e)
+                        {
+                            http_response_code(500);
+                            $res = [
+                                "status" => 500,
+                                "msg" =>  "Internal Server Error: ". $e->getMessage() . "."
+                            ];
+                            echo json_encode($res);
+                            exit;
+                        }
+
+                        $date = date("Y-m-d H:i:s");
+                        $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_tujuan, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?)");
+                        $stmt->bind_param('ssis', $number, $input['tujuan'], $input['amount'], $date);
                         try {
                             $stmt->execute();
                         }
