@@ -58,8 +58,8 @@
                         }
                         
                         $date = date("Y-m-d H:i:s");
-                        $stmt = $conn->prepare("INSERT INTO history_topup(history_topup_number, history_topup_amount, history_topup_date) VALUE (?, ?, ?)");
-                        $stmt->bind_param('sis', $input['number'], $input['amount'], $date);
+                        $stmt = $conn->prepare("INSERT INTO history_topup(history_topup_number, history_topup_name, history_topup_amount, history_topup_date) VALUE (?, ?, ?, ?)");
+                        $stmt->bind_param('ssis', $input['number'], $result['users_name'], $input['amount'], $date);
                         try {
                             $stmt->execute();
                         }

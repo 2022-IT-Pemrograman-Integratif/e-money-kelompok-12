@@ -105,8 +105,8 @@
                         }
 
                         $date = date("Y-m-d H:i:s");
-                        $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_tujuan, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?)");
-                        $stmt->bind_param('ssis', $number, $input['tujuan'], $input['amount'], $date);
+                        $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_number_name, history_transfer_tujuan, history_transfer_tujuan_name, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?, ?, ?)");
+                        $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $result_tujuan['users_name'], $input['amount'], $date);
                         try {
                             $stmt->execute();
                         }

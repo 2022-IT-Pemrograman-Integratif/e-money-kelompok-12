@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2022 at 05:25 PM
+-- Generation Time: Apr 19, 2022 at 06:04 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -35,14 +35,6 @@ CREATE TABLE `history_topup` (
   `history_topup_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `history_topup`
---
-
-INSERT INTO `history_topup` (`history_topup_id`, `history_topup_number`, `history_topup_name`, `history_topup_amount`, `history_topup_date`) VALUES
-(1, '082140605035', '', 20000, '2022-04-19 14:56:02'),
-(2, '082140605035', '', 20000, '2022-04-19 15:35:33');
-
 -- --------------------------------------------------------
 
 --
@@ -58,13 +50,6 @@ CREATE TABLE `history_transfer` (
   `history_transfer_amount` float NOT NULL,
   `history_transfer_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `history_transfer`
---
-
-INSERT INTO `history_transfer` (`history_transfer_id`, `history_transfer_number`, `history_transfer_number_name`, `history_transfer_tujuan`, `history_transfer_tujuan_name`, `history_transfer_amount`, `history_transfer_date`) VALUES
-(1, '082140605035', '', '082140605081', '', 10000, '2022-04-19 15:15:35');
 
 -- --------------------------------------------------------
 
@@ -86,8 +71,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`users_number`, `users_name`, `users_password`, `users_role`, `users_balance`, `users_dateCreated`) VALUES
-('082140605035', 'admin', '$2y$10$vQTXYQWG3DRQtJR.fzDAAexhAC.7tQqjedao3CEn2RsoLJCDIG9Vq', 'admin', 19910100, '0000-00-00 00:00:00'),
-('082140605081', 'Stevenson Alexander', '$2y$10$JswYXlEh0Ujx78KK/yJK2eiu1eOHiLmS1DPjjomNKawOB8d9qWn5m', 'user', 190000, '2022-04-17 20:41:03');
+('082140605035', 'admin', '$2y$10$vQTXYQWG3DRQtJR.fzDAAexhAC.7tQqjedao3CEn2RsoLJCDIG9Vq', 'admin', 19830100, '0000-00-00 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -119,13 +103,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `history_topup`
 --
 ALTER TABLE `history_topup`
-  MODIFY `history_topup_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `history_topup_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `history_transfer`
 --
 ALTER TABLE `history_transfer`
-  MODIFY `history_transfer_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `history_transfer_id` bigint(20) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
