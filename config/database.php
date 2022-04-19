@@ -8,10 +8,10 @@ class Database
 
     public function connect()
     {
-        $this->server = "localhost";
-        $this->user = "root";
-        $this->password = "";
-        $this->db = "e-money-kelompok-12";
+        $this->server = "remotemysql.com";
+        $this->user = "5fiCsWmD49";
+        $this->password = "1cpMlSuNOB";
+        $this->db = "5fiCsWmD49";
 
         try {
             $conn = new mysqli($this->server, $this->user, $this->password, $this->db);
