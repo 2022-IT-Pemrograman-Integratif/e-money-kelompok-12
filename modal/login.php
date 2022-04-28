@@ -52,7 +52,7 @@ class Login
             http_response_code(401);
                 $res = [
                     'status' => 401,
-                    'msg' => "Username Password harus di isi."
+                    'msg' => "Number Password harus di isi."
                 ];
             echo json_encode($res);
             exit;
