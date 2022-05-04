@@ -6,14 +6,14 @@
 
     use Firebase\JWT\JWT;
 
-    class Gallecoins
+    class Buskidicoin
     {
         public function __construct()
         {
             date_default_timezone_set('Asia/Jakarta');
         }
         
-        public function gallecoins($input = NULL)
+        public function buskidicoin($input = NULL)
         {
             $auth = new Auth;
             $token = $auth->auth();
@@ -53,21 +53,19 @@
                     else {
                         $ch = curl_init();
 
-                        $url = "https://gallecoins.herokuapp.com/api/users";
+                        $url = "https://arielaliski.xyz/e-money-kelompok-2/public/buskidicoin/publics/login";
                         $data = [
                             "username" => "PeacePay",
                             "password" => "PeacePay"
                         ];
-                        $encode_data = json_encode($data);
                     
                         curl_setopt_array($ch, [
                             CURLOPT_URL => $url,
                             CURLOPT_RETURNTRANSFER => true,
                             CURLOPT_CUSTOMREQUEST => "POST",
-                            CURLOPT_POSTFIELDS => $encode_data,
+                            CURLOPT_POSTFIELDS => $data,
                             CURLOPT_HTTPHEADER => [
-                                "Accept: application/json",
-                                "Content-Type: application/json"
+                                "Content-Type: multipart/form-data"
                             ]
                         ]);
                     
@@ -78,27 +76,27 @@
                         }
                         else {
                             $result = json_decode($res);
-                            $jwt = $result->token;
+                            $jwt = $result->message->token;
                         }
                         curl_close($ch);
                                             
                         $ch = curl_init();
 
-                        $url = "https://gallecoins.herokuapp.com/api/transfer";
+                        $url = "https://arielaliski.xyz/e-money-kelompok-2/public/buskidicoin/admin/transfer";
                         $data = [
-                            "amount" => $input['amount'],
-                            "phone" => $input['tujuan'],
-                            "description" => "Transfer from " . $token->data->number . " using PeacePay. Amount: " . $input['amount'] . "."
+                            "nomer_hp" => "082169420720",
+                            "nomer_hp_tujuan" => $input['tujuan'],
+                            "e_money_tujuan" => "Buski Coins",
+                            "amount" => $input['amount']
                         ];
-                        $encode_data = json_encode($data);
                     
                         curl_setopt_array($ch, [
                             CURLOPT_URL => $url,
                             CURLOPT_RETURNTRANSFER => true,
                             CURLOPT_CUSTOMREQUEST => "POST",
-                            CURLOPT_POSTFIELDS => $encode_data,
+                            CURLOPT_POSTFIELDS => $data,
                             CURLOPT_HTTPHEADER => [
-                                "Content-Type: application/json",
+                                "Content-Type: multipart/form-data",
                                 "Authorization: Bearer " . $jwt
                             ]
                         ]);
@@ -112,7 +110,7 @@
                         }
                         else {
                             curl_close($ch);
-                            if($status == 1) {
+                            if($status == 201) {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
@@ -133,9 +131,9 @@
                                 }
 
                                 $date = date("Y-m-d H:i:s");
-                                $gallecoins = "Gallecoins";
+                                $cuanind = "Buskidicoin";
                                 $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_number_name, history_transfer_tujuan, history_transfer_tujuan_name, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?, ?, ?)");
-                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $gallecoins, $input['amount'], $date);
+                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $cuanind, $input['amount'], $date);
                                 try {
                                     $stmt->execute();
                                 }
@@ -149,6 +147,31 @@
                                     echo json_encode($res);
                                     exit;
                                 }
+                                
+                                $admin = "082140605035";
+                                $stmt = $conn->prepare("SELECT * FROM users WHERE users_number = ?");
+                                $stmt->bind_param('s', $admin);
+                                $stmt->execute();
+                                $res = $stmt->get_result();
+                                $result = $res->fetch_assoc();
+
+                                $balance = $result['users_balance'] + $input['amount'];
+                                $stmt = $conn->prepare("UPDATE users SET users_balance = ? WHERE users_number = ?");
+                                $stmt->bind_param('ss', $balance, $admin);
+                                try {
+                                    $stmt->execute();
+                                }
+                                catch (Exception $e)
+                                {
+                                    http_response_code(500);
+                                    $res = [
+                                        "status" => 500,
+                                        "msg" =>  "Internal Server Error: ". $e->getMessage() . "."
+                                    ];
+                                    echo json_encode($res);
+                                    exit;
+                                }
+
                                 http_response_code(200);
                                 $res = [
                                     "status" => 200,

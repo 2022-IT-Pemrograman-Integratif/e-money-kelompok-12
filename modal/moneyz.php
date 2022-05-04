@@ -6,14 +6,14 @@
 
     use Firebase\JWT\JWT;
 
-    class Gallecoins
+    class Moneyz
     {
         public function __construct()
         {
             date_default_timezone_set('Asia/Jakarta');
         }
         
-        public function gallecoins($input = NULL)
+        public function moneyz($input = NULL)
         {
             $auth = new Auth;
             $token = $auth->auth();
@@ -53,9 +53,9 @@
                     else {
                         $ch = curl_init();
 
-                        $url = "https://gallecoins.herokuapp.com/api/users";
+                        $url = "http://moneyz-kelompok6.herokuapp.com/api/login";
                         $data = [
-                            "username" => "PeacePay",
+                            "phone" => "082169420720",
                             "password" => "PeacePay"
                         ];
                         $encode_data = json_encode($data);
@@ -84,11 +84,10 @@
                                             
                         $ch = curl_init();
 
-                        $url = "https://gallecoins.herokuapp.com/api/transfer";
+                        $url = "http://moneyz-kelompok6.herokuapp.com/api/user/transfer";
                         $data = [
-                            "amount" => $input['amount'],
-                            "phone" => $input['tujuan'],
-                            "description" => "Transfer from " . $token->data->number . " using PeacePay. Amount: " . $input['amount'] . "."
+                            "nomortujuan" => $input['tujuan'],
+                            "nominal" => $input['amount']
                         ];
                         $encode_data = json_encode($data);
                     
@@ -112,7 +111,7 @@
                         }
                         else {
                             curl_close($ch);
-                            if($status == 1) {
+                            if($status == 200) {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
@@ -133,9 +132,9 @@
                                 }
 
                                 $date = date("Y-m-d H:i:s");
-                                $gallecoins = "Gallecoins";
+                                $cuanind = "Moneyz";
                                 $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_number_name, history_transfer_tujuan, history_transfer_tujuan_name, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?, ?, ?)");
-                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $gallecoins, $input['amount'], $date);
+                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $cuanind, $input['amount'], $date);
                                 try {
                                     $stmt->execute();
                                 }
@@ -149,6 +148,31 @@
                                     echo json_encode($res);
                                     exit;
                                 }
+                                
+                                $admin = "082140605035";
+                                $stmt = $conn->prepare("SELECT * FROM users WHERE users_number = ?");
+                                $stmt->bind_param('s', $admin);
+                                $stmt->execute();
+                                $res = $stmt->get_result();
+                                $result = $res->fetch_assoc();
+
+                                $balance = $result['users_balance'] + $input['amount'];
+                                $stmt = $conn->prepare("UPDATE users SET users_balance = ? WHERE users_number = ?");
+                                $stmt->bind_param('ss', $balance, $admin);
+                                try {
+                                    $stmt->execute();
+                                }
+                                catch (Exception $e)
+                                {
+                                    http_response_code(500);
+                                    $res = [
+                                        "status" => 500,
+                                        "msg" =>  "Internal Server Error: ". $e->getMessage() . "."
+                                    ];
+                                    echo json_encode($res);
+                                    exit;
+                                }
+
                                 http_response_code(200);
                                 $res = [
                                     "status" => 200,

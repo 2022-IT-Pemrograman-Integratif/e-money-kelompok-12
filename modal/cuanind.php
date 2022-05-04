@@ -6,14 +6,14 @@
 
     use Firebase\JWT\JWT;
 
-    class Gallecoins
+    class Cuanind
     {
         public function __construct()
         {
             date_default_timezone_set('Asia/Jakarta');
         }
         
-        public function gallecoins($input = NULL)
+        public function cuanind($input = NULL)
         {
             $auth = new Auth;
             $token = $auth->auth();
@@ -53,10 +53,11 @@
                     else {
                         $ch = curl_init();
 
-                        $url = "https://gallecoins.herokuapp.com/api/users";
+                        $url = "https://e-money-kelompok5.herokuapp.com/cuanind/user/login";
                         $data = [
                             "username" => "PeacePay",
-                            "password" => "PeacePay"
+                            "password" => "PeacePay",
+                            "notelp" => 12
                         ];
                         $encode_data = json_encode($data);
                     
@@ -78,17 +79,16 @@
                         }
                         else {
                             $result = json_decode($res);
-                            $jwt = $result->token;
+                            $jwt = $result;
                         }
                         curl_close($ch);
                                             
                         $ch = curl_init();
 
-                        $url = "https://gallecoins.herokuapp.com/api/transfer";
+                        $url = "https://e-money-kelompok5.herokuapp.com/cuanind/transfer";
                         $data = [
                             "amount" => $input['amount'],
-                            "phone" => $input['tujuan'],
-                            "description" => "Transfer from " . $token->data->number . " using PeacePay. Amount: " . $input['amount'] . "."
+                            "target" => $input['tujuan']
                         ];
                         $encode_data = json_encode($data);
                     
@@ -105,6 +105,8 @@
                     
                         $res = curl_exec($ch);
                         $result = json_decode($res);
+                        print_r($result);
+                        exit;
                         $status = $result->status;
                     
                         if($e = curl_error($ch)) {
@@ -133,9 +135,9 @@
                                 }
 
                                 $date = date("Y-m-d H:i:s");
-                                $gallecoins = "Gallecoins";
+                                $cuanind = "CuanIND";
                                 $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_number_name, history_transfer_tujuan, history_transfer_tujuan_name, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?, ?, ?)");
-                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $gallecoins, $input['amount'], $date);
+                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $cuanind, $input['amount'], $date);
                                 try {
                                     $stmt->execute();
                                 }
