@@ -104,15 +104,14 @@
                         ]);
                     
                         $res = curl_exec($ch);
-                        if($res == "") echo "YES";
-                        exit;
-                    
+                        $result = json_decode($res);
+
                         if($e = curl_error($ch)) {
                             echo $e;
                         }
                         else {
                             curl_close($ch);
-                            if($res == 201) {
+                            if(!isset($result->status)) {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
@@ -133,9 +132,9 @@
                                 }
 
                                 $date = date("Y-m-d H:i:s");
-                                $cuanind = "Buskidicoin";
+                                $kcnpay = "KCN Pay";
                                 $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_number_name, history_transfer_tujuan, history_transfer_tujuan_name, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?, ?, ?)");
-                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $cuanind, $input['amount'], $date);
+                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $kcnpay, $input['amount'], $date);
                                 try {
                                     $stmt->execute();
                                 }
