@@ -55,9 +55,8 @@
 
                         $url = "https://e-money-kelompok5.herokuapp.com/cuanind/user/login";
                         $data = [
-                            "username" => "PeacePay",
-                            "password" => "PeacePay",
-                            "notelp" => 12
+                            "notelp" => 12,
+                            "password" => "PeacePay"
                         ];
                         $encode_data = json_encode($data);
                     
@@ -78,8 +77,7 @@
                             echo $e;
                         }
                         else {
-                            $result = json_decode($res);
-                            $jwt = $result;
+                            $jwt = $res;
                         }
                         curl_close($ch);
                                             
@@ -105,16 +103,13 @@
                     
                         $res = curl_exec($ch);
                         $result = json_decode($res);
-                        print_r($result);
-                        exit;
-                        $status = $result->status;
                     
                         if($e = curl_error($ch)) {
                             echo $e;
                         }
                         else {
                             curl_close($ch);
-                            if($status == 1) {
+                            if($result == "Transfer berhasil") {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
@@ -135,9 +130,9 @@
                                 }
 
                                 $date = date("Y-m-d H:i:s");
-                                $cuanind = "CuanIND";
+                                $emoney = "CuanIND";
                                 $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_number_name, history_transfer_tujuan, history_transfer_tujuan_name, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?, ?, ?)");
-                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $cuanind, $input['amount'], $date);
+                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $emoney, $input['amount'], $date);
                                 try {
                                     $stmt->execute();
                                 }

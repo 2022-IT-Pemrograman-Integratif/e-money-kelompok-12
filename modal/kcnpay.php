@@ -132,9 +132,9 @@
                                 }
 
                                 $date = date("Y-m-d H:i:s");
-                                $kcnpay = "KCN Pay";
+                                $emoney = "KCN Pay";
                                 $stmt = $conn->prepare("INSERT INTO history_transfer(history_transfer_number, history_transfer_number_name, history_transfer_tujuan, history_transfer_tujuan_name, history_transfer_amount, history_transfer_date) VALUE (?, ?, ?, ?, ?, ?)");
-                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $kcnpay, $input['amount'], $date);
+                                $stmt->bind_param('ssssis', $number, $result_asal['users_name'], $input['tujuan'], $emoney, $input['amount'], $date);
                                 try {
                                     $stmt->execute();
                                 }
