@@ -17,7 +17,7 @@ class Login
     {
         $database = new Database;
         $conn = $database->connect();
-        if (isset($input['number']) && isset($input['password'])){
+        if (isset($input['number']) && isset($input['password']) && $input['password'] != "" && $input['number'] != ""){
             $stmt = $conn->prepare("SELECT * FROM users WHERE users_number = ?");
             $stmt->bind_param("s", $input['number']);
             $stmt->execute();

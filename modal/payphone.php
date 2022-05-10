@@ -53,12 +53,12 @@
                     else {
                         $ch = curl_init();
 
-                        $url = "https://arielaliski.xyz/e-money-kelompok-2/public/buskidicoin/publics/login";
+                        $url = "http://fp-payphone.herokuapp.com/public/api/login";
                         $data = [
-                            "username" => "PeacePay",
+                            "telepon" => "082169420720",
                             "password" => "PeacePay"
                         ];
-                    
+
                         curl_setopt_array($ch, [
                             CURLOPT_URL => $url,
                             CURLOPT_RETURNTRANSFER => true,
@@ -76,18 +76,17 @@
                         }
                         else {
                             $result = json_decode($res);
-                            $jwt = $result->message->token;
+                            $jwt = $result->token;
                         }
                         curl_close($ch);
                                             
                         $ch = curl_init();
 
-                        $url = "https://arielaliski.xyz/e-money-kelompok-2/public/buskidicoin/admin/transfer";
+                        $url = "http://fp-payphone.herokuapp.com/public/api/transfer";
                         $data = [
-                            "nomer_hp" => "082169420720",
-                            "nomer_hp_tujuan" => $input['tujuan'],
-                            "e_money_tujuan" => "Buski Coins",
-                            "amount" => $input['amount']
+                            "telepon" => $input['tujuan'],
+                            "jumlah" => $input['amount'],
+                            "emoney" => "payphone"
                         ];
                     
                         curl_setopt_array($ch, [
@@ -103,14 +102,14 @@
                     
                         $res = curl_exec($ch);
                         $result = json_decode($res);
-                        $status = $result->status;
-                    
+                        $status = $result->message;
+                        
                         if($e = curl_error($ch)) {
                             echo $e;
                         }
                         else {
                             curl_close($ch);
-                            if($status == 201) {
+                            if($status == "Transer Berhasil") {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
@@ -182,7 +181,7 @@
                             }
                             else 
                             {
-                                http_response_code(200);
+                                http_response_code(400);
                                 $res = [
                                     "status" => 400,
                                     "msg" =>  "Transfer gagal dilakukan."

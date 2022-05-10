@@ -17,7 +17,7 @@ class Register
         $database = new Database;
         $conn = $database->connect();
 
-        if(isset($input['number']) && isset($input['name']) && isset($input['password']))
+        if(isset($input['number']) && isset($input['name']) && isset($input['password']) && $input['password'] != "" && $input['number'] != "" && $input['name'] != "")
         {
             $stmt = $conn->prepare("SELECT * FROM users WHERE users_number = ?");
             $stmt->bind_param('s', $input['number']);

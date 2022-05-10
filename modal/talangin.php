@@ -185,7 +185,7 @@
                             }
                             else 
                             {
-                                http_response_code(200);
+                                http_response_code(400);
                                 $res = [
                                     "status" => 400,
                                     "msg" =>  "Transfer gagal dilakukan."
