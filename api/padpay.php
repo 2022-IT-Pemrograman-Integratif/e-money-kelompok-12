@@ -4,7 +4,7 @@
     http_response_code(503);
     $res = [
         "status" => 503,
-        "msg" =>  "Sistem belum terintegrasi."
+        "msg" =>  "Sistem Padpay belum terintegrasi."
     ];
     echo json_encode($res);
     exit;

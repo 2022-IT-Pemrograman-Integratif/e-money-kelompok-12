@@ -65,6 +65,7 @@
                             CURLOPT_RETURNTRANSFER => true,
                             CURLOPT_CUSTOMREQUEST => "POST",
                             CURLOPT_POSTFIELDS => $encode_data,
+                            //CURLOPT_SSL_VERIFYPEER => false,
                             CURLOPT_HTTPHEADER => [
                                 "Accept: application/json",
                                 "Content-Type: application/json"
@@ -81,14 +82,14 @@
                             $jwt = $result->jwt;
                         }
                         curl_close($ch);
-                                            
+                        
                         $ch = curl_init();
 
                         $url = "https://e-money-kelomok-11.000webhostapp.com/api/transfer.php";
                         $data = [
-                            "email" => "peace@pay.com",
                             "jwt" => $jwt,
-                            "tujuan" => $input['tujuan'],
+                            "pengirim" => "082169420720",
+                            "penerima" => $input['tujuan'],
                             "jumlah" => $input['amount']
                         ];
                         $encode_data = json_encode($data);
@@ -98,6 +99,7 @@
                             CURLOPT_RETURNTRANSFER => true,
                             CURLOPT_CUSTOMREQUEST => "POST",
                             CURLOPT_POSTFIELDS => $encode_data,
+                            //CURLOPT_SSL_VERIFYPEER => false,
                             CURLOPT_HTTPHEADER => [
                                 "Content-Type: application/json",
                             ]
