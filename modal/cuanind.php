@@ -55,7 +55,7 @@
 
                         $url = "https://e-money-kelompok5.herokuapp.com/cuanind/user/login";
                         $data = [
-                            "notelp" => 12,
+                            "notelp" => "082169420720",
                             "password" => "PeacePay"
                         ];
                         $encode_data = json_encode($data);
