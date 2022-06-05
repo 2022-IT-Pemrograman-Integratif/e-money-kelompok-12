@@ -106,16 +106,14 @@
                         ]);
                     
                         $res = curl_exec($ch);
-                        print_r($res);
-                        // $result = json_decode($res);
-                        // $status = $result->message;
+                        $result = json_decode($res);
                     
                         if($e = curl_error($ch)) {
                             echo $e;
                         }
                         else {
                             curl_close($ch);
-                            if($status == "Transfer Successful.") {
+                            if(str_contains($res, 'Transfer Successfull')) {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
@@ -210,4 +208,3 @@
             }  
         }
     }
-?>

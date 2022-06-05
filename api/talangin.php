@@ -1,13 +1,5 @@
 <?php
     include '../modal/talangin.php';
-    
-    http_response_code(503);
-    $res = [
-        "status" => 503,
-        "msg" =>  "Sistem Talangin belum terintegrasi."
-    ];
-    echo json_encode($res);
-    exit;
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $talangin = new Talangin;
