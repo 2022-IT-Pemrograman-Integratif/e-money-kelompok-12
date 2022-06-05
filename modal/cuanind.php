@@ -109,7 +109,7 @@
                         }
                         else {
                             curl_close($ch);
-                            if($result == "Transfer berhasil") {
+                            if(str_contains($result, 'berhasil')) {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
