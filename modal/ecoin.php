@@ -86,9 +86,6 @@
 
                         $url = "https://ecoin10.my.id/api/transfer";
                         $data = [
-                            "phone" => "082169420720",
-                            "password" => "PeacePay",
-                            "tfmethod" => 1,
                             "amount" => $input['amount'],
                             "phone2" => $input['tujuan'],
                             "description" => "Transfer from " . $token->data->number . " using PeacePay. Amount: " . $input['amount']
@@ -115,7 +112,7 @@
                         }
                         else {
                             curl_close($ch);
-                            if($status == "Transfer Successful.") {
+                            if($status == "Transfer Successfull.") {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
