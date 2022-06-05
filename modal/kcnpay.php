@@ -105,13 +105,14 @@
                     
                         $res = curl_exec($ch);
                         $result = json_decode($res);
+                        $status = $result->status;
 
                         if($e = curl_error($ch)) {
                             echo $e;
                         }
                         else {
                             curl_close($ch);
-                            if(!isset($result->status)) {
+                            if($status == 200) {
                                 $balance = $result_asal['users_balance'] - $input['amount'];
                                 $number = $token->data->number;
 
